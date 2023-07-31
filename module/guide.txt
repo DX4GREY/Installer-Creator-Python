@@ -1,0 +1,8 @@
+Copyright (c) Dx4 2023
+
+Set Up:
+1. Start installer.py
+2. insert requirement to requirements.txt
+3. done
+
+You now can see in output directory
