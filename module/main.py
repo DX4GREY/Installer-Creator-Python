@@ -6,6 +6,8 @@ import sys
 import time
 import pyfiglet
 
+output_path = 'Awang-Installer-OutPut'
+
 def input_bin_name(stdscr):
     stdscr.clear()
     stdscr.addstr(0, 0, "Nama bin:")
@@ -34,10 +36,10 @@ def setup(stdscr):
 
     try:
         # Salin direktori resources ke output dengan nama sesuai input bin
-        shutil.copytree(os.path.join(main_folder, 'resources'), os.path.join('Awang-Installer-OutPut', bin_name))
+        shutil.copytree(os.path.join(main_folder, 'resources'), os.path.join(output_path, bin_name))
         
         # Edit file /output/ input bin/install_to_bin.sh
-        file_path = os.path.join('Awang-Installer-OutPut', bin_name, 'install_to_bin.sh')
+        file_path = os.path.join(output_path, bin_name, 'install_to_bin.sh')
         with open(file_path, 'r') as file:
             file_contents = file.read()
             # Replace semua teks "example" sesuai input bin
@@ -47,7 +49,7 @@ def setup(stdscr):
         
         data_to_copy = input_main_file(stdscr)
         
-        module_path = os.path.join('Awang-Installer-OutPut', bin_name, 'module') 
+        module_path = os.path.join(output_path, bin_name, 'module') 
         if not os.path.exists(module_path):
             os.mkdir(module_path)
         # Salin data ke output/bin_name/module/
@@ -55,10 +57,11 @@ def setup(stdscr):
             # Salin semua file dan folder di direktori saat ini
             all_files = glob.glob("*")
             for file in all_files:
-                if os.path.isdir(file):
-                    shutil.copytree(file, os.path.join(module_path, file))
-                else:
-                    shutil.copy(file, os.path.join(module_path, file))
+                if not file == output_path:
+                    if os.path.isdir(file):
+                        shutil.copytree(file, os.path.join(module_path, file))
+                    else:
+                        shutil.copy(file, os.path.join(module_path, file))
         else:
             if os.path.isdir(data_to_copy):
                 shutil.copytree(data_to_copy, os.path.join(module_path, os.path.basename(data_to_copy)))
@@ -145,7 +148,7 @@ def main(stdscr):
 if __name__ == "__main__":
     main_folder = os.path.dirname(os.path.abspath(__file__))
     sys.path.append(main_folder)
-    folder_path = os.path.join('Awang-Installer-OutPut') 
+    folder_path = os.path.join(output_path) 
 
     if not os.path.exists(folder_path):
         os.mkdir(folder_path)
